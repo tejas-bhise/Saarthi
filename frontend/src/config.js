@@ -1,33 +1,33 @@
 // Backend API Configuration
-const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-// WebSocket URL
-export const WEBSOCKET_URL = import.meta.env.VITE_WEBSOCKET_URL || 'ws://localhost:8000';
+// WebSocket URL (use http/https, not ws/wss - socket.io handles protocol)
+const WEBSOCKET_URL = import.meta.env.VITE_WEBSOCKET_URL || 'http://localhost:8000';
 
 // API Endpoints
 export const API_ENDPOINTS = {
   // Auth endpoints
-  signup: `${BACKEND_URL}/api/auth/signup`,
-  login: `${BACKEND_URL}/api/auth/login`,
-  profile: `${BACKEND_URL}/api/auth/me`,
+  signup: `${API_URL}/api/auth/signup`,
+  login: `${API_URL}/api/auth/login`,
+  profile: `${API_URL}/api/auth/me`,
   
   // Session endpoints
-  sessions: `${BACKEND_URL}/api/sessions`,
+  sessions: `${API_URL}/api/sessions`,
   
   // Tutor endpoints
-  companions: `${BACKEND_URL}/api/companions`,
+  companions: `${API_URL}/api/companions`,
   
   // Room endpoints
-  rooms: `${BACKEND_URL}/api/rooms`,
+  rooms: `${API_URL}/api/rooms`,
   
   // Chat endpoint
-  chat: `${BACKEND_URL}/api/chat/message`,
+  chat: `${API_URL}/api/chat/message`,
   
   // WebRTC config
-  webrtcConfig: `${BACKEND_URL}/api/webrtc/config`,
+  webrtcConfig: `${API_URL}/api/webrtc/config`,
   
   // Health check
-  health: `${BACKEND_URL}/health`,
+  health: `${API_URL}/health`,
 };
 
 // App Configuration
@@ -38,5 +38,8 @@ export const APP_CONFIG = {
   defaultSubject: 'Physics',
 };
 
-// Export BACKEND_URL
-export { BACKEND_URL };
+// Export URLs for direct use
+export { API_URL, WEBSOCKET_URL };
+
+// Backward compatibility
+export const BACKEND_URL = API_URL;
