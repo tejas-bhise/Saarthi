@@ -9,6 +9,9 @@ import { RoomPage } from './pages/RoomPage';
 import { VideoCallPage } from './pages/VideoCallPage';
 import { isAuthenticated } from './utils/api';
 
+// ✅ ADD THIS LINE
+import { Analytics } from "@vercel/analytics/react";
+
 const companionsData = {
   'omkar_ai': { id: 'omkar_ai', name: 'Omkar', subject: 'AI & ML', avatar: '🧑💻' },
   'priya_biology': { id: 'priya_biology', name: 'Priya', subject: 'Biology', avatar: '👩🔬' }
@@ -35,7 +38,6 @@ const VideoCallPageWrapper = () => {
   };
 
   const handleEndCall = () => {
-    // ✅ Just navigate back normally - browser will pop to Dashboard
     navigate('/dashboard');
   };
 
@@ -51,7 +53,6 @@ function CompanionsPageWrapper() {
   const navigate = useNavigate();
 
   const handleSelectCompanion = (companion) => {
-    console.log('✅ Selected companion:', companion.name);
     const userId = localStorage.getItem('userId') || `user_${Date.now()}`;
     localStorage.setItem('userId', userId);
     
@@ -76,7 +77,6 @@ function RoomPageWrapper() {
   const userId = location.state?.userId || localStorage.getItem('userId') || `user_${Date.now()}`;
 
   const handleJoinRoom = (roomId) => {
-    console.log('✅ Joining room:', roomId);
     navigate(`/video/${roomId}?companion=${companion.id}`, {
       state: { companion, userId, roomId }
     });
@@ -99,7 +99,6 @@ function LandingPageWrapper() {
 
   React.useEffect(() => {
     if (isAuthenticated()) {
-      // ✅ Replace to Dashboard if already logged in
       navigate('/dashboard', { replace: true });
     }
   }, [navigate]);
@@ -111,11 +110,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public Routes */}
         <Route path="/" element={<LandingPageWrapper />} />
         <Route path="/auth" element={<AuthPage />} />
 
-        {/* Protected Routes */}
         <Route 
           path="/dashboard" 
           element={
@@ -154,6 +151,9 @@ function App() {
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+
+      {/* ✅ ADD THIS LINE */}
+      <Analytics />
     </BrowserRouter>
   );
 }
