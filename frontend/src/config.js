@@ -1,6 +1,3 @@
-alert("CONFIG FILE LOADED");
-console.log("CONFIG FILE LOADED");
-
 // =========================
 // Environment validation
 // =========================
