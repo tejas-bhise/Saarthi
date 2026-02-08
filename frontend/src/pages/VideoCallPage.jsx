@@ -10,8 +10,9 @@ import { CallControls } from '../components/CallControls';
 import { useVoiceInput } from '../hooks/useVoiceInput';
 import { sendChatMessage, getSessionMessages } from '../utils/api';
 import toast, { Toaster } from 'react-hot-toast';
+import { WEBSOCKET_URL } from '../config';
 
-const socket = io('http://localhost:8000', {
+const socket = io(WEBSOCKET_URL, {
   transports: ['websocket'],
   reconnection: true,
   reconnectionAttempts: 5,

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { API_URL } from '../config';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -74,7 +75,7 @@ export default function Dashboard() {
         return;
       }
 
-      const response = await fetch('http://localhost:8000/api/sessions', {
+      const response = await fetch(`${API_URL}/api/sessions`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
