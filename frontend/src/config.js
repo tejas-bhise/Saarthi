@@ -1,32 +1,46 @@
-// Backend API Configuration
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// DEBUG (safe to keep for now)
+console.log("VITE_API_URL =", import.meta.env.VITE_API_URL);
+console.log("VITE_WEBSOCKET_URL =", import.meta.env.VITE_WEBSOCKET_URL);
 
-// WebSocket URL (use http/https, not ws/wss - socket.io handles protocol)
-const WEBSOCKET_URL = import.meta.env.VITE_WEBSOCKET_URL || 'http://localhost:8000';
+// 🚨 Hard requirement: env vars MUST exist
+if (!import.meta.env.VITE_API_URL) {
+  throw new Error("❌ VITE_API_URL is not defined");
+}
+
+if (!import.meta.env.VITE_WEBSOCKET_URL) {
+  throw new Error("❌ VITE_WEBSOCKET_URL is not defined");
+}
+
+// Backend API Configuration
+const API_URL = import.meta.env.VITE_API_URL;
+
+// WebSocket URL
+// ⚠️ Use https/http — socket.io will auto-upgrade to wss
+const WEBSOCKET_URL = import.meta.env.VITE_WEBSOCKET_URL;
 
 // API Endpoints
 export const API_ENDPOINTS = {
-  // Auth endpoints
+  // Auth
   signup: `${API_URL}/api/auth/signup`,
   login: `${API_URL}/api/auth/login`,
   profile: `${API_URL}/api/auth/me`,
-  
-  // Session endpoints
+
+  // Sessions
   sessions: `${API_URL}/api/sessions`,
-  
-  // Tutor endpoints
+
+  // Companions
   companions: `${API_URL}/api/companions`,
-  
-  // Room endpoints
+
+  // Rooms
   rooms: `${API_URL}/api/rooms`,
-  
-  // Chat endpoint
+
+  // Chat
   chat: `${API_URL}/api/chat/message`,
-  
-  // WebRTC config
+
+  // WebRTC
   webrtcConfig: `${API_URL}/api/webrtc/config`,
-  
-  // Health check
+
+  // Health
   health: `${API_URL}/health`,
 };
 
@@ -38,7 +52,7 @@ export const APP_CONFIG = {
   defaultSubject: 'Physics',
 };
 
-// Export URLs for direct use
+// Export URLs
 export { API_URL, WEBSOCKET_URL };
 
 // Backward compatibility
