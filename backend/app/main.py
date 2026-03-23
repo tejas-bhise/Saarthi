@@ -42,13 +42,12 @@ fastapi_app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
-        "http://127.0.0.1:3000",
+    "http://localhost:5173",
 
-        "https://saarthi-ai-iota.vercel.app",
-        "https://saarthi-ai-git-main-tejas-bhises-projects.vercel.app",
-
-        "https://*.onrender.com",
-        "https://onrender.com",
+    "https://saarthi-ai-iota.vercel.app",
+    "https://saarthi-exe0267af-tejas-bhises-projects.vercel.app",
+    ""
+    ""
     ],
     allow_credentials=True,
     allow_methods=["*"],
