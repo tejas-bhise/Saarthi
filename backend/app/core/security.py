@@ -20,17 +20,14 @@ settings = get_settings()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-def hash_password(password: str) -> str:
-    """
-    Hash a plain password
-    """
+def hash_password(password: str):
+    # bcrypt max length fix (72 bytes)
+    password = password.encode("utf-8")[:72].decode("utf-8", "ignore")
     return pwd_context.hash(password)
 
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """
-    Verify a plain password against hashed password
-    """
+def verify_password(plain_password, hashed_password):
+    plain_password = plain_password.encode("utf-8")[:72].decode("utf-8", "ignore")
     return pwd_context.verify(plain_password, hashed_password)
 
 
