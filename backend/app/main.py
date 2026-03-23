@@ -35,14 +35,20 @@ fastapi_app = FastAPI(
 )
 
 # ========================================
-# CORS (SINGLE & CORRECT)
+# CORS (LOCAL + VERCEL + RENDER)
 # ========================================
 
 fastapi_app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+
         "https://saarthi-ai-iota.vercel.app",
         "https://saarthi-ai-git-main-tejas-bhises-projects.vercel.app",
+
+        "https://*.onrender.com",
+        "https://onrender.com",
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -75,7 +81,7 @@ async def health():
     return {"status": "healthy"}
 
 # ========================================
-# FINAL ASGI APP (THIS FIXES EVERYTHING)
+# FINAL ASGI APP
 # ========================================
 
 app = socketio.ASGIApp(sio, fastapi_app)

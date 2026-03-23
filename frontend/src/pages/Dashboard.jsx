@@ -176,19 +176,40 @@ export default function Dashboard() {
   ];
 
   // FIXED: Accurate study hours calculation based on actual session durations
-  const calculateStudyHours = () => {
-    if (sessions.length === 0) return '0.0';
-    
-    // Assuming each session is 30 minutes (0.5 hours)
-    // If you have actual duration data in sessions, use that instead
-    const totalMinutes = sessions.reduce((sum, session) => {
-      // If session has duration field, use it: session.duration
-      // Otherwise default to 30 minutes per session
-      return sum + (session.duration || 30);
-    }, 0);
-    
-    return (totalMinutes / 60).toFixed(1);
+const calculateStudyHours = () => {
+  if (!sessions || sessions.length === 0) {
+    return {
+      numeric: 0,
+      display: "0m"
+    };
+  }
+
+  const totalMs = sessions.reduce((sum, session) => {
+    if (!session.created_at) return sum;
+
+    const start = new Date(session.created_at);
+    const end = session.last_active
+      ? new Date(session.last_active)
+      : new Date();
+
+    const diff = end - start;
+
+    // ignore invalid or extremely long sessions (>6 hours)
+    if (diff < 0 || diff > 1000 * 60 * 60 * 6) return sum;
+
+    return sum + diff;
+  }, 0);
+
+  const totalMinutes = Math.floor(totalMs / (1000 * 60));
+
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  return {
+    numeric: totalMinutes / 60,
+    display: hours === 0 ? `${minutes}m` : `${hours}h ${minutes}m`
   };
+};
 
   // FIXED: Accurate streak calculation based on consecutive days
   const calculateStreak = () => {
@@ -233,7 +254,10 @@ export default function Dashboard() {
   };
 
   const streak = calculateStreak();
-  const totalHours = calculateStudyHours();
+  const studyTime = calculateStudyHours();
+
+  const totalHours = studyTime.numeric;      // used for progress calculation
+  const totalHoursDisplay = studyTime.display; // used for UI display
 
   const getFilteredSessions = () => {
     return sessions.filter(session => {
@@ -655,7 +679,7 @@ export default function Dashboard() {
           <div>
             <div className="text-xs font-semibold text-indigo-300 uppercase tracking-wider mb-2">Today's Focus</div>
             <h3 className="text-lg font-bold text-white mb-1">Continue Your Learning Journey</h3>
-            <p className="text-sm text-slate-300">You've studied {totalHours} hours this week</p>
+            <p className="text-sm text-slate-300">You've studied {totalHoursDisplay} this week</p>
           </div>
           <button className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-sm font-bold rounded-xl transition-all duration-300 shadow-lg">
             Choose Tutor
@@ -693,7 +717,7 @@ export default function Dashboard() {
               </svg>
             </div>
           </div>
-          <div className="text-3xl font-bold text-white mb-1">{totalHours}</div>
+          <div className="text-3xl font-bold text-white mb-1">{totalHoursDisplay}</div>
           <div className="text-xs font-medium text-slate-400">Hours Studied</div>
         </div>
 
@@ -788,7 +812,7 @@ export default function Dashboard() {
             <div className="flex items-baseline justify-between mb-3">
               <span className="text-xs text-slate-400 font-medium">Progress</span>
               <div className="text-right">
-                <span className="text-2xl font-bold text-white">{totalHours}</span>
+                <span className="text-2xl font-bold text-white">{totalHoursDisplay}</span>
                 <span className="text-sm text-slate-400 font-medium"> / {studyGoal}h</span>
               </div>
             </div>

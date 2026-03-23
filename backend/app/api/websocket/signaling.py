@@ -11,8 +11,11 @@ from . import events
 sio = socketio.AsyncServer(
     async_mode="asgi",
     cors_allowed_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
         "https://saarthi-ai-iota.vercel.app",
         "https://saarthi-ai-git-main-tejas-bhises-projects.vercel.app",
+        "https://*.onrender.com",
     ],
 )
 
